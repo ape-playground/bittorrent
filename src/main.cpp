@@ -4,6 +4,11 @@
 
 using json = nlohmann::json;
 
+json decode_bencoded_value(const std::string &encoded_value) {
+    size_t index = 0;
+    return decoder(encoded_value, index);
+}
+
 int main(int argc, char *argv[]) {
     std::cout << std::unitbuf;
     std::cerr << std::unitbuf;

@@ -4,12 +4,17 @@
 #include <string>
 #include "lib/nlohmann/json.hpp"
 
-nlohmann::json decode_bencoded_string(const std::string &encoded_string);
+using json = nlohmann::json;
 
-nlohmann::json decode_bencoded_integer(const std::string &encoded_integer);
+json decode_bencoded_string(const std::string &encoded_string, size_t &index);
 
-nlohmann::json decode_bencoded_list(const std::string &encoded_value, size_t &index);
+json decode_bencoded_integer(const std::string &encoded_integer, size_t &index);
 
-nlohmann::json decode_bencoded_value(const std::string &encoded_value);
+json decode_bencoded_list(const std::string &encoded_value, size_t &index);
+
+json decode_bencoded_dict(const std::string &encoded_value, size_t &index);
+
+nlohmann::json decoder(const std::string &encoded_value, size_t &index);
+
 
 #endif // BENCODE_DECODER_H
