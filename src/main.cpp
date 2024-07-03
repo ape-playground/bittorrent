@@ -1,13 +1,10 @@
 #include <iostream>
 #include <string>
+#include "lib/nlohmann/json.hpp"
 #include "bencode_decoder.h"
+#include "read_torrent_file.h"
 
 using json = nlohmann::json;
-
-json decode_bencoded_value(const std::string &encoded_value) {
-    size_t index = 0;
-    return decoder(encoded_value, index);
-}
 
 int main(int argc, char *argv[]) {
     std::cout << std::unitbuf;
@@ -28,6 +25,9 @@ int main(int argc, char *argv[]) {
         std::string encoded_value = argv[2];
         json decoded_value = decode_bencoded_value(encoded_value);
         std::cout << decoded_value.dump() << std::endl;
+    } else if (command == "info") {
+        std::string filename = argv[2];
+        torrent_info(filename);
     } else {
         std::cerr << "unknown command: " << command << std::endl;
         return 1;

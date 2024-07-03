@@ -117,3 +117,9 @@ json decoder(const std::string &encoded_value, size_t &index) {
             throw std::runtime_error("Invalid bencoded value type.");
     }
 }
+
+
+json decode_bencoded_value(const std::string &encoded_value) {
+    size_t index = 0;
+    return decoder(encoded_value, index);
+}

@@ -14,7 +14,9 @@ json decode_bencoded_list(const std::string &encoded_value, size_t &index);
 
 json decode_bencoded_dict(const std::string &encoded_value, size_t &index);
 
-nlohmann::json decoder(const std::string &encoded_value, size_t &index);
+json decoder(const std::string &encoded_value, size_t &index);
+
+json decode_bencoded_value(const std::string &encoded_value);
 
 
 #endif // BENCODE_DECODER_H
