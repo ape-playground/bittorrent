@@ -45,10 +45,9 @@ int main(int argc, char* argv[]) {
         // You can use print statements as follows for debugging, they'll be visible when running tests.
         std::cout << "Logs from your program will appear here!" << std::endl;
 
-        // Uncomment this block to pass the first stage
-        // std::string encoded_value = argv[2];
-        // json decoded_value = decode_bencoded_value(encoded_value);
-        // std::cout << decoded_value.dump() << std::endl;
+         std::string encoded_value = argv[2];
+         json decoded_value = decode_bencoded_value(encoded_value);
+         std::cout << decoded_value.dump() << std::endl;
     } else {
         std::cerr << "unknown command: " << command << std::endl;
         return 1;

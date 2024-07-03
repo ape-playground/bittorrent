@@ -46,3 +46,5 @@ CTestTestfile.cmake
 _deps
 .DS_Store
 build/
+
+cmake-build-debug/
