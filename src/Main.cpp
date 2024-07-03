@@ -14,7 +14,7 @@ json decode_bencoded_value(const std::string &encoded_value) {
         size_t colon_index = encoded_value.find(':');
         if (colon_index != std::string::npos) {
             std::string number_string = encoded_value.substr(0, colon_index);
-            int64_t number = std::strcoll(number_string.c_str(), nullptr);
+            int64_t number = std::atoi(number_string.c_str()); // NOLINT
             std::string str = encoded_value.substr(colon_index + 1, number);
             return json(str); // NOLINT
         } else {
