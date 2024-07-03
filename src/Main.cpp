@@ -14,12 +14,20 @@ json decode_bencoded_value(const std::string &encoded_value) {
         size_t colon_index = encoded_value.find(':');
         if (colon_index != std::string::npos) {
             std::string number_string = encoded_value.substr(0, colon_index);
-            int64_t number = std::atoll(number_string.c_str());
+            int64_t number = std::strcoll(number_string.c_str(), nullptr);
             std::string str = encoded_value.substr(colon_index + 1, number);
-            return json(str);
+            return json(str); // NOLINT
         } else {
             throw std::runtime_error("Invalid encoded value: " + encoded_value);
         }
+    } else if (encoded_value[0] == 'i') {
+        // Example: "i42e" -> 42
+        if (encoded_value[encoded_value.size() - 1] != 'e') {
+            throw std::runtime_error("Invalid encoded value: " + encoded_value);
+        }
+        std::string number_string = encoded_value.substr(1, encoded_value.size() - 2);
+        int64_t number = std::strtoll(number_string.c_str(), nullptr, 10); // [<cint>]
+        return json(number); // NOLINT
     } else {
         throw std::runtime_error("Unhandled encoded value: " + encoded_value);
     }
@@ -34,7 +42,7 @@ int main(int argc, char *argv[]) {
         std::cerr << "Usage: " << argv[0] << " decode <encoded_value>" << std::endl;
         return 1;
     }
-    
+
     std::string command = argv[1];
 
     if (command == "decode") {
