@@ -1,4 +1,4 @@
-#include "bencode_decoder.h"
+#include "bencode/decoder.h"
 #include "lib/nlohmann/json.hpp"
 #include <iostream>
 #include <stdexcept>
@@ -28,7 +28,7 @@ json decode_bencoded_string(const std::string &encoded_string, size_t &index) {
 
     std::string result = encoded_string.substr(colon + 1, length);
     index = colon + 1 + length;
-    return json(result);
+    return json(result); //NOLINT
 }
 
 /**
@@ -50,7 +50,7 @@ json decode_bencoded_integer(const std::string &encoded_integer, size_t &index) 
     try {
         int64_t num = std::stoll(num_str);
         index = end + 1; // skip 'e'
-        return json(num);
+        return json(num); //NOLINT
     } catch (const std::invalid_argument &e) {
         throw std::runtime_error("Invalid integer encoding: " + std::string(e.what()));
     } catch (const std::out_of_range &e) {
@@ -66,7 +66,7 @@ json decode_bencoded_integer(const std::string &encoded_integer, size_t &index) 
  * SAMPLE: l3:foo3:bare
  * RESULT: ["foo", "bar"]
  */
-json decode_bencoded_list(const std::string &encoded_value, size_t &index) {
+json decode_bencoded_list(const std::string &encoded_value, size_t &index) { //NOLINT
     index++; // skip 'l'
     std::vector<json> list;
 
@@ -74,7 +74,7 @@ json decode_bencoded_list(const std::string &encoded_value, size_t &index) {
         list.push_back(decoder(encoded_value, index));
     }
     index++; // skip 'e'
-    return json(list);
+    return json(list); //NOLINT
 }
 
 /**
@@ -85,7 +85,7 @@ json decode_bencoded_list(const std::string &encoded_value, size_t &index) {
  * SAMPLE: d3:foo3:bare
  * RESULT: {"foo": "bar"}
  */
-json decode_bencoded_dict(const std::string &encoded_value, size_t &index) {
+json decode_bencoded_dict(const std::string &encoded_value, size_t &index) { //NOLINT
     index++; // skip 'd'
     json dict = json::object();
 
@@ -102,7 +102,7 @@ json decode_bencoded_dict(const std::string &encoded_value, size_t &index) {
  * Decode a bencoded value of any type from the given position in the encoded string.
  * Updates the index to point past the decoded value.
  */
-json decoder(const std::string &encoded_value, size_t &index) {
+json decoder(const std::string &encoded_value, size_t &index) { //NOLINT
     char type = encoded_value[index];
     switch (type) {
         case 'i':

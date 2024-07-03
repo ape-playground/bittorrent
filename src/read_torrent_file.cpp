@@ -1,7 +1,9 @@
 #include <iostream>
 #include "file_utils.h"
-#include "bencode_decoder.h"
+#include "bencode/decoder.h"
+#include "bencode/encoder.h"
 #include "lib/nlohmann/json.hpp"
+#include "sha_utils.h"
 
 using json = nlohmann::json;
 
@@ -28,4 +30,10 @@ void torrent_info(const std::string &file_path) {
 
     std::cout << "Tracker URL: " << URL << std::endl;
     std::cout << "Length: " << LENGTH << std::endl;
+
+    auto INFO = decoded_value["info"];
+
+    std::string benconded_info = encoder::encode(INFO);
+    std::cout << "Info Hash: " << sha1(benconded_info) << std::endl;
+
 }

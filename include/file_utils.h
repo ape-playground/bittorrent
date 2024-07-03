@@ -1,9 +1,5 @@
-//
-// Created by Chaipat Jainan on 3/7/2024 AD.
-//
-
-#ifndef BITTORRENT_STARTER_CPP_FILE_UTILS_H
-#define BITTORRENT_STARTER_CPP_FILE_UTILS_H
+#ifndef FILE_UTILS_H
+#define FILE_UTILS_H
 
 #include <fstream>
 #include <sstream>
@@ -23,4 +19,4 @@ namespace FileUtils {
     }
 }
 
-#endif //BITTORRENT_STARTER_CPP_FILE_UTILS_H
+#endif //FILE_UTILS_H

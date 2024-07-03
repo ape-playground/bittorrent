@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.13)
 project(bittorrent-starter-cpp)
 
 include_directories(include)
-include_directories(src)
 
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp src/*.hpp)
 

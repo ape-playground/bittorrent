@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "lib/nlohmann/json.hpp"
-#include "bencode_decoder.h"
+#include "bencode/decoder.h"
 #include "read_torrent_file.h"
 
 using json = nlohmann::json;
