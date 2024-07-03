@@ -8,7 +8,7 @@
 
 using json = nlohmann::json;
 
-json decode_bencoded_value(const std::string& encoded_value) {
+json decode_bencoded_value(const std::string &encoded_value) {
     if (std::isdigit(encoded_value[0])) {
         // Example: "5:hello" -> "hello"
         size_t colon_index = encoded_value.find(':');
@@ -25,7 +25,7 @@ json decode_bencoded_value(const std::string& encoded_value) {
     }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     // Flush after every std::cout / std::cerr
     std::cout << std::unitbuf;
     std::cerr << std::unitbuf;
@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
         std::cerr << "Usage: " << argv[0] << " decode <encoded_value>" << std::endl;
         return 1;
     }
-
+    
     std::string command = argv[1];
 
     if (command == "decode") {
@@ -42,12 +42,9 @@ int main(int argc, char* argv[]) {
             std::cerr << "Usage: " << argv[0] << " decode <encoded_value>" << std::endl;
             return 1;
         }
-        // You can use print statements as follows for debugging, they'll be visible when running tests.
-        std::cout << "Logs from your program will appear here!" << std::endl;
-
-         std::string encoded_value = argv[2];
-         json decoded_value = decode_bencoded_value(encoded_value);
-         std::cout << decoded_value.dump() << std::endl;
+        std::string encoded_value = argv[2];
+        json decoded_value = decode_bencoded_value(encoded_value);
+        std::cout << decoded_value.dump() << std::endl;
     } else {
         std::cerr << "unknown command: " << command << std::endl;
         return 1;
