@@ -10,6 +10,10 @@ using json = nlohmann::json;
 /**
  * Decode a bencoded string from the given position in the encoded string.
  * Updates the index to point past the decoded string.
+ *
+ * PATTERNS: <length>:<string>
+ * SAMPLE: 3:foo
+ * RESULT: "foo"
  */
 json decode_bencoded_string(const std::string &encoded_string, size_t &index) {
     size_t colon = encoded_string.find(':', index);
@@ -30,6 +34,10 @@ json decode_bencoded_string(const std::string &encoded_string, size_t &index) {
 /**
  * Decode a bencoded integer from the given position in the encoded string.
  * Updates the index to point past the decoded integer.
+ *
+ * PATTERNS: i<value>e
+ * SAMPLE: i42e
+ * RESULT: 42
  */
 json decode_bencoded_integer(const std::string &encoded_integer, size_t &index) {
     size_t start = index + 1; // skip 'i'
@@ -53,6 +61,10 @@ json decode_bencoded_integer(const std::string &encoded_integer, size_t &index) 
 /**
  * Decode a bencoded list from the given position in the encoded string.
  * Updates the index to point past the decoded list.
+ *
+ * PATTERNS: l<value>e
+ * SAMPLE: l3:foo3:bare
+ * RESULT: ["foo", "bar"]
  */
 json decode_bencoded_list(const std::string &encoded_value, size_t &index) {
     index++; // skip 'l'
@@ -68,6 +80,10 @@ json decode_bencoded_list(const std::string &encoded_value, size_t &index) {
 /**
  * Decode a bencoded dictionary from the given position in the encoded string.
  * Updates the index to point past the decoded dictionary.
+ *
+ * PATTERNS: d<key><value>e
+ * SAMPLE: d3:foo3:bare
+ * RESULT: {"foo": "bar"}
  */
 json decode_bencoded_dict(const std::string &encoded_value, size_t &index) {
     index++; // skip 'd'
