@@ -2,8 +2,7 @@
 #include <iomanip>
 #include <sstream>
 #include "file_utils.h"
-#include "bencode/decoder.h"
-#include "bencode/encoder.h"
+#include "bencode.h"
 #include "lib/nlohmann/json.hpp"
 #include "sha_utils.h"
 
@@ -11,7 +10,7 @@ using json = nlohmann::json;
 
 json read_torrent_file(const std::string &file_path) {
     std::string encoded_value = FileUtils::read(file_path);
-    BencodeDecoder decoder(encoded_value);
+    Bencode decoder(encoded_value);
     return decoder.decode();
 }
 
@@ -24,7 +23,7 @@ void torrent_info(const std::string &file_path) {
         std::string pieces = decoded_value["info"]["pieces"];
 
 
-        BencodeEncoder encoder(decoded_value["info"]);
+        Bencode encoder(decoded_value["info"]);
         std::string encoded_info = encoder.encode();
 
         std::cout << "Tracker URL: " << tracker_url << std::endl;

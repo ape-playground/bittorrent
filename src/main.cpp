@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "lib/nlohmann/json.hpp"
-#include "bencode/decoder.h"
+#include "bencode.h"
 #include "read_torrent_file.h"
 
 using json = nlohmann::json;
@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
             return 1;
         }
         std::string encoded_value = argv[2];
-        BencodeDecoder decoder(encoded_value);
+        Bencode decoder(encoded_value);
         json decoded_value = decoder.decode();
         std::cout << decoded_value.dump() << std::endl;
     } else if (command == "info") {
