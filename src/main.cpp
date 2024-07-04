@@ -23,7 +23,8 @@ int main(int argc, char *argv[]) {
             return 1;
         }
         std::string encoded_value = argv[2];
-        json decoded_value = decode_bencoded_value(encoded_value);
+        BencodeDecoder decoder(encoded_value);
+        json decoded_value = decoder.decode();
         std::cout << decoded_value.dump() << std::endl;
     } else if (command == "info") {
         std::string filename = argv[2];

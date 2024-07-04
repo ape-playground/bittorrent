@@ -1,59 +1,47 @@
 #include "bencode/encoder.h"
-#include "lib/nlohmann/json.hpp"
-#include <iostream>
 #include <sstream>
 
+BencodeEncoder::BencodeEncoder(const json &value) : value(value) {}
 
-using json = nlohmann::json;
+std::string BencodeEncoder::encode() {
+    return encodeValue(value);
+}
 
-namespace encoder {
-    std::string encode_bencoded_string(const json &decoded_string) {
-        std::ostringstream os;
-        const std::string &str = decoded_string.get<std::string>();
-        os << str.size() << ":" << str;
-        return os.str();
+std::string BencodeEncoder::encodeString(const std::string &str) {
+    return std::to_string(str.size()) + ":" + str;
+}
+
+std::string BencodeEncoder::encodeInteger(int64_t value) {
+    return "i" + std::to_string(value) + "e";
+}
+
+std::string BencodeEncoder::encodeList(const json &list) {
+    std::string encoded = "l";
+    for (const auto &item: list) {
+        encoded += encodeValue(item);
     }
+    return encoded + "e";
+}
 
-    std::string encode_bencoded_integer(const json &decoded_integer) {
-        std::ostringstream os;
-        os << "i" << decoded_integer.get<int>() << "e";
-        return os.str();
+std::string BencodeEncoder::encodeDict(const json &dict) {
+    std::string encoded = "d";
+    for (auto it = dict.begin(); it != dict.end(); ++it) {
+        encoded += encodeString(it.key());
+        encoded += encodeValue(it.value());
     }
+    return encoded + "e";
+}
 
-    std::string encode_bencoded_list(const json &decoded_list) {
-        std::ostringstream os;
-        os << "l";
-        for (const auto &item: decoded_list) {
-            os << encode(item);
-        }
-        os << "e";
-        return os.str();
-    }
-
-    std::string encode_bencoded_dict(const json &decoded_dict) {
-        std::ostringstream os;
-        os << "d";
-        for (const auto &item: decoded_dict.items()) {
-            os << item.key().size() << ":" << item.key() << encode(item.value());
-        }
-        os << "e";
-        return os.str();
-    }
-
-    std::string encode(const json &decoded_value) {
-        std::ostringstream os;
-        if (decoded_value.is_string()) {
-            os << encode_bencoded_string(decoded_value);
-        } else if (decoded_value.is_number()) {
-            os << encode_bencoded_integer(decoded_value);
-        } else if (decoded_value.is_array()) {
-            os << encode_bencoded_list(decoded_value);
-        } else if (decoded_value.is_object()) {
-            os << encode_bencoded_dict(decoded_value);
-        } else {
-            throw std::invalid_argument("Invalid type");
-        }
-        return os.str();
-
+std::string BencodeEncoder::encodeValue(const json &value) {
+    if (value.is_string()) {
+        return encodeString(value.get<std::string>());
+    } else if (value.is_number_integer()) {
+        return encodeInteger(value.get<int64_t>());
+    } else if (value.is_array()) {
+        return encodeList(value);
+    } else if (value.is_object()) {
+        return encodeDict(value);
+    } else {
+        throw std::runtime_error("Unsupported JSON value type for bencoding.");
     }
 }

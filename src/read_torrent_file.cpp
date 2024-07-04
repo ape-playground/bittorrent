@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 #include "file_utils.h"
 #include "bencode/decoder.h"
 #include "bencode/encoder.h"
@@ -7,33 +9,39 @@
 
 using json = nlohmann::json;
 
-/**
- * Read the torrent file and decode the bencoded value.
- *
- * @param file_path The path to the torrent file.
- */
 json read_torrent_file(const std::string &file_path) {
-    std::string encoded_torrent = FileUtils::read(file_path);
-    return decode_bencoded_value(encoded_torrent);
+    std::string encoded_value = FileUtils::read(file_path);
+    BencodeDecoder decoder(encoded_value);
+    return decoder.decode();
 }
 
-/**
- * Print the tracker URL and the length of the file in the torrent file.
- *
- * @param file_path The path to the torrent file.
- */
 void torrent_info(const std::string &file_path) {
-    json decoded_value = read_torrent_file(file_path);
+    try {
+        json decoded_value = read_torrent_file(file_path);
+        std::string tracker_url = decoded_value["announce"];
+        int file_length = decoded_value["info"]["length"];
+        int piece_length = decoded_value["info"]["piece length"];
+        std::string pieces = decoded_value["info"]["pieces"];
 
-    auto URL = decoded_value["announce"].get<std::string>();
-    auto LENGTH = decoded_value["info"]["length"].get<int>();
 
-    std::cout << "Tracker URL: " << URL << std::endl;
-    std::cout << "Length: " << LENGTH << std::endl;
+        BencodeEncoder encoder(decoded_value["info"]);
+        std::string encoded_info = encoder.encode();
 
-    auto INFO = decoded_value["info"];
+        std::cout << "Tracker URL: " << tracker_url << std::endl;
+        std::cout << "File Length: " << file_length << " bytes" << std::endl;
+        std::cout << "Info Hash: " << sha1(encoded_info) << std::endl;
+        std::cout << "Piece Length: " << piece_length << " bytes" << std::endl;
+        std::cout << "Piece Hashes: " << std::endl;
 
-    std::string benconded_info = encoder::encode(INFO);
-    std::cout << "Info Hash: " << sha1(benconded_info) << std::endl;
-
+        for (std::size_t i = 0; i < pieces.length(); i += 20) {
+            std::string piece = pieces.substr(i, 20);
+            std::stringstream ss;
+            for (unsigned char byte: piece) {
+                ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte);
+            }
+            std::cout << ss.str() << std::endl;
+        }
+    } catch (const std::exception &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
 }

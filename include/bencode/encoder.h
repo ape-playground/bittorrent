@@ -1,20 +1,31 @@
 #ifndef BENCODE_ENCODER_H
 #define BENCODE_ENCODER_H
 
-#include <string>
+
 #include "lib/nlohmann/json.hpp"
+#include <string>
+#include <vector>
 
-namespace encoder {
-    std::string encode_bencoded_string(const nlohmann::json &decoded_string);
+using json = nlohmann::json;
 
-    std::string encode_bencoded_integer(const nlohmann::json &decoded_integer);
+class BencodeEncoder {
+public:
+    explicit BencodeEncoder(const json &value);
 
-    std::string encode_bencoded_list(const nlohmann::json &decoded_list);
+    std::string encode();
 
-    std::string encode_bencoded_dict(const nlohmann::json &decoded_dict);
+private:
+    const json &value;
 
-    std::string encode(const nlohmann::json &decoded_value);
-}
+    std::string encodeString(const std::string &str);
 
+    std::string encodeInteger(int64_t value);
+
+    std::string encodeList(const json &list);
+
+    std::string encodeDict(const json &dict);
+
+    std::string encodeValue(const json &value);
+};
 
 #endif //BENCODE_ENCODER_H
