@@ -2,11 +2,11 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
-#include "file_utils.h"
+#include "utils/file.h"
 #include "bencode.h"
-#include "bin_utils.h"
+#include "utils/binary.h"
 #include "lib/nlohmann/json.hpp"
-#include "sha_utils.h"
+#include "utils/sha1.h"
 #include "read_torrent_file.h"
 
 using json = nlohmann::json;
