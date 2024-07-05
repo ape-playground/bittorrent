@@ -28,7 +28,18 @@ int main(int argc, char *argv[]) {
         std::cout << decoded_value.dump() << std::endl;
     } else if (command == "info") {
         std::string filename = argv[2];
-        torrent_info(filename);
+        TorrentInfo info = torrentInfo(filename);
+        std::cout << "Tracker URL: " << info.tracker_url << std::endl;
+        std::cout << "Length: " << info.file_length << std::endl;
+        std::cout << "Info Hash: " << info.info_hash << std::endl;
+        std::cout << "Piece Length: " << info.piece_length << std::endl;
+        std::cout << "Piece Hashes:" << std::endl;
+        for (const std::string &hash: info.piece_hashes) {
+            std::cout << hash << std::endl;
+        }
+    } else if (command == "print") {
+        std::string filename = argv[2];
+        printTorrentContent(filename);
     } else {
         std::cerr << "unknown command: " << command << std::endl;
         return 1;
